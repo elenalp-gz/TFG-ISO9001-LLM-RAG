@@ -1,0 +1,24 @@
+# LOG DE EVALUACIÓN TÉCNICA - SISTEMA RAG ISO 9001
+
+## 1. Entorno de Ejecución
+- Hardware: MacBook Air (Apple Silicon)
+- Memoria: 8GB / 16GB RAM
+- Modelo LLM: Llama 3 (8B) via Ollama
+- Base Vectorial: FAISS (3 chunks por consulta)
+
+## 2. Registro de Pruebas (Latencia)
+| Fecha | Tipo de Consulta | Latencia (seg) | Resultado |
+| :--- | :--- | :--- | :--- |
+| 14/04/2026 | Documentación de procesos (Silla) | 47.26s | ÉXITO (Citó Cláusula 8.5.1) |
+| 14/04/2026 | Consulta Responsabilidades (Calidad) | 31.76s | ÉXITO (Identificó Document Controller) |
+| 14/04/2026 | Procedimiento Técnico (Humedad) | 36.12s | ÉXITO (Citó Higrómetro y 12%) |
+| 14/04/2026 | Objetivos Estratégicos (2026) | 16.01s | ERROR (Contexto no cargado - Solucionado) |
+| 14/04/2026 | Consulta Cruzada (Humedad 15%) | 37.22s | ÉXITO (Razonamiento Multidocumento) |
+
+## 3. Evaluación Cualitativa (Criterio Humano)
+1. Precisión Normativa: 10/10 (El modelo vincula correctamente los problemas con las cláusulas ISO).
+2. Formato: 9/10 (Respeta tablas y negritas gracias al Few-Shot).
+3. Veracidad (Hallucinations): 0 detectadas (El sistema admite cuando no tiene información en el RAG).
+
+## 4. Conclusiones para la Memoria
+La latencia media se sitúa en ~35 segundos. Se considera aceptable para un entorno de consultoría offline donde la prioridad es la seguridad de los datos de la empresa y no la inmediatez de la respuesta.
