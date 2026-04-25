@@ -76,7 +76,7 @@ final_prompt = ChatPromptTemplate.from_messages([
 # ==========================================
 # 3. MODELO Y CADENA (LCEL)
 # ==========================================
-llm = ChatOllama(model="llama3", temperature=0.1)
+llm = ChatOllama(model="llama3", temperature=0.1, max_tokens=2048, top_p=0.9, repeat_penalty=1.15)
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
@@ -111,15 +111,37 @@ if __name__ == "__main__":
 
         print("\n🔍 Analizando normativa y archivos locales...")
         
+        # --- INICIO DE MEDICIÓN ---
         inicio = time.time()
+        
         try:
             respuesta = rag_chain.invoke(user_input)
+            
+            # --- FIN DE MEDICIÓN Y CÁLCULOS ---
             fin = time.time()
+            latencia_total = fin - inicio
+            numero_palabras = len(respuesta.split())
+            tokens_estimados = numero_palabras * 1.3 
+            
+            # Evitar división por cero por si la respuesta es instantánea (error)
+            if latencia_total > 0:
+                throughput = tokens_estimados / latencia_total
+            else:
+                throughput = 0
 
+            # --- IMPRESIÓN DE RESULTADOS ---
             print("\n" + "—"*50)
             print(respuesta)
             print("—"*50)
-            print(f"⏱️ Latencia: {fin - inicio:.2f} segundos | 📌 Llama 3 Local\n")
+            
+            # --- IMPRESIÓN DE MÉTRICAS ---
+            print("\n" + "="*40)
+            print("📊 MÉTRICAS DE EFICIENCIA")
+            print("="*40)
+            print(f"⏱️ Latencia:    {latencia_total:.2f} segundos")
+            print(f"📝 Longitud:    {numero_palabras} palabras (~{int(tokens_estimados)} tokens)")
+            print(f"🚀 Rendimiento: {throughput:.2f} tokens/segundo")
+            print("="*40 + "\n")
             
         except Exception as e:
             print(f"❌ Error en la generación: {e}")
